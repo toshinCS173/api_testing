@@ -1,0 +1,42 @@
+name: Integration Test Build for Activity API
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+#Clone/Checkout the project
+#Setup the python
+#Install all the dependencies which are in the requirements.txt
+#pytest with html options
+#Check if tests are success or failure and upload the test report
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+    
+      - name: Set up Python
+        uses: actions/setup-python@v3
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        
+      - name: Run Integration Tests
+        run: |
+          pytest 
+
+      - name: Upload HTML Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-report
+          path: ./reports/report*.html
+    
+     
+
+ 
