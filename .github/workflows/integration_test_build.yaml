@@ -5,8 +5,6 @@ on:
     branches:
       - main
   workflow_dispatch:
-  schedule:
-    - cron: "15 9 * * *"
 
 #Clone/Checkout the project
 #Setup the python
@@ -39,6 +37,21 @@ jobs:
           name: pytest-report
           path: ./reports/report*.html
     
-     
+  build-image:
+    needs: run-tests
+
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      
+      - name: Build Docker Image
+        run: |
+          docker build -t apitesting .
+      
+      - name: Run Local Image
+        run: |
+          docker run apitesting
 
  
